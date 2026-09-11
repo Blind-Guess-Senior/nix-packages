@@ -7,19 +7,30 @@
 # commands such as:
 #     nix-build -A mypackage
 
-{ pkgs ? import <nixpkgs> { } }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
+let
+  overlays = import ./overlays;
+  packageOverlay = overlays.full;
+  packageSet = pkgs.extend packageOverlay;
+  packageAttrs = packageOverlay packageSet pkgs;
+in
 {
   # The `lib`, `overlays`, `nixosModules`, `homeModules`,
   # `darwinModules` and `flakeModules` names are special
   lib = import ./lib { inherit pkgs; }; # functions
+
   nixosModules = import ./nixos-modules; # NixOS modules
-  # homeModules = { }; # Home Manager modules
+
+  homeModules = import ./home-modules; # Home Manager modules
+
   # darwinModules = { }; # nix-darwin modules
+
   # flakeModules = { }; # flake-parts modules
+
   overlays = import ./overlays; # nixpkgs overlays
 
-  example-package = pkgs.callPackage ./pkgs/example-package { };
-  # some-qt5-package = pkgs.libsForQt5.callPackage ./pkgs/some-qt5-package { };
-  # ...
 }
+// pkgs.lib.filterAttrs (_: value: pkgs.lib.isDerivation value) packageAttrs
