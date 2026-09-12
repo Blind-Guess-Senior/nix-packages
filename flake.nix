@@ -47,9 +47,15 @@
         ) ownPackages
       );
 
-      nixosModules = import ./nixos-modules;
+      # NUR publishes `nixosModules` / `homeModules` verbatim, so those hold leaf
+      # modules only and `lib.attrValues` over them means "everything, once".
+      # The bundles (default / toys / full) live in the `*ModuleSets` outputs,
+      # which NUR ignores — pick exactly one of them per host.
+      nixosModules = (import ./nixos-modules).modules;
+      nixosModuleSets = (import ./nixos-modules).sets;
 
-      homeModules = import ./home-modules;
+      homeModules = (import ./home-modules).modules;
+      homeModuleSets = (import ./home-modules).sets;
 
       # darwinModules = import ./darwin-modules;
 

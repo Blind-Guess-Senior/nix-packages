@@ -22,9 +22,11 @@ in
   # `darwinModules` and `flakeModules` names are special
   lib = import ./lib { inherit pkgs; }; # functions
 
-  nixosModules = import ./nixos-modules; # NixOS modules
+  nixosModules = (import ./nixos-modules).modules; # NixOS modules (leaves only)
+  nixosModuleSets = (import ./nixos-modules).sets; # NixOS module bundles
 
-  homeModules = import ./home-modules; # Home Manager modules
+  homeModules = (import ./home-modules).modules; # Home Manager modules (leaves only)
+  homeModuleSets = (import ./home-modules).sets; # Home Manager module bundles
 
   # darwinModules = { }; # nix-darwin modules
 
