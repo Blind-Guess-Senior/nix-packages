@@ -1,11 +1,18 @@
 let
-  serious-modules = {
-    # Add serious NixOS modules here, e.g. my-module = import ./my-module;
-  };
+  collectModules = import ../lib/collect-modules.nix;
 
-  toy-modules = {
-    movie-pool = import ./movie-pool;
-  };
+  # The directory layout mirrors the package set, so a package's path tells you
+  # where its module lives:
+  #   pkgs/by-name/<shard>/<name>       <-> by-name/<shard>/<name>
+  #   pkgs/toys/by-name/<shard>/<name>  <-> toys/by-name/<shard>/<name>
+  #
+  # Both roots are scanned, so publishing a module is just dropping
+  # `<shard>/<name>/default.nix` in the right place — no registration list to
+  # update. `by-name/` does not exist yet and that is fine: a missing root
+  # collects to `{ }`.
+  serious-modules = collectModules ./by-name;
+
+  toy-modules = collectModules ./toys/by-name;
 
   all-modules = serious-modules // toy-modules;
 
