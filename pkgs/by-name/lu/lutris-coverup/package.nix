@@ -6,7 +6,7 @@
 
 python313Packages.buildPythonApplication (finalAttrs: {
   pname = "lutris-coverup";
-  version = "0.1.2";
+  version = "0.1.1";
 
   pyproject = true;
 
@@ -14,7 +14,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
     owner = "callmenoodles";
     repo = "lutris-coverup";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LaMHeEOib5AE4U95rwuhYyXmLwbmAfY+EUk8V3eMoW0=";
+    hash = lib.fakeHash;
   };
 
   postPatch = ''
@@ -44,6 +44,11 @@ python313Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "lutris_coverup.cli" ];
+
+  passthru.updatePolicy.autoMerge = [
+    "patch"
+    "minor"
+  ];
 
   meta = {
     description = "Download missing cover art, banners, and icons for Lutris";
