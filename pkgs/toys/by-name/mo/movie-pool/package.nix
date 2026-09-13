@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "movie-pool";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "Blind-Guess-Senior";
     repo = "movie-pool";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ahIvaUlNerhuVXzQ7jFIXGySiGzdjG2u+WPfsHskStc=";
+    hash = "sha256-DMPjqeDSItRrZM2s8YO91DJ6sjvQMokeQjtE6Xa821o=";
   };
 
   # The app is written against the standard library only, so there is nothing

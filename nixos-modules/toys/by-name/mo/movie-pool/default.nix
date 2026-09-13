@@ -82,6 +82,26 @@ in
       description = "Title shown in the web UI.";
     };
 
+    basePath = lib.mkOption {
+      type = lib.types.strMatching "/?([A-Za-z0-9._~-]+/)*[A-Za-z0-9._~-]*";
+      default = "";
+      example = "/movie";
+      description = ''
+        Extra path prefix the app answers under, for a reverse proxy that
+        forwards the path unchanged: with `location /movie/` and
+        `proxyPass = "http://127.0.0.1:8086";` set this to `/movie`.
+
+        It is an alias, not a fixed address. The links of a page follow the
+        path the request came in by, so one instance can answer below a prefix,
+        at the root of a subdomain and on its port at the same time. A proxy
+        that strips the prefix itself announces it with an
+        `X-Forwarded-Prefix` header instead, and needs nothing here.
+      '';
+      apply =
+        value:
+        lib.removeSuffix "/" (if lib.hasPrefix "/" value then value else "/" + value);
+    };
+
     stateDirectory = lib.mkOption {
       type = lib.types.str;
       default = "movie-pool";
@@ -117,6 +137,9 @@ in
       }
       // lib.optionalAttrs (cfg.timeZone != null) {
         TZ = cfg.timeZone;
+      }
+      // lib.optionalAttrs (cfg.basePath != "") {
+        MOVIE_POOL_BASE_PATH = cfg.basePath;
       };
 
       serviceConfig = {
