@@ -27,6 +27,11 @@ buildPythonPackage (finalAttrs: {
     "steamgrid"
   ];
 
+  passthru.updatePolicy.autoMerge = [
+    "patch"
+    "minor"
+  ];
+
   meta = {
     description = "Python wrapper for the SteamGridDB API.";
     homepage = "https://github.com/ZebcoWeb/python-steamgriddb";

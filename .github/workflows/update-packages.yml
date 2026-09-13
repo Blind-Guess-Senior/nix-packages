@@ -1,0 +1,69 @@
+name: update-packages
+
+# One job per package in the list below. ci/update-package.sh updates a package,
+# builds it as a check and reports the version class; the pull request records
+# the bump and is merged when the package's `passthru.updatePolicy.autoMerge`
+# covers that class.
+#
+# build.yml is not involved: it is neither modified nor used as a gate, and
+# nothing here triggers it (everything acts with the default GITHUB_TOKEN).
+
+on:
+  schedule:
+    - cron: '23 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: update-packages
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: lutris-coverup,     path: lutris-coverup }
+          - { name: movie-pool,         path: movie-pool }
+          - { name: python-steamgriddb, path: python3Packages.python-steamgriddb }
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update and build
+        id: bump
+        run: bash ci/update-package.sh "${{ matrix.path }}"
+
+      # The only change in the tree is the edited package file: the action
+      # commits it, pushes the branch and opens the PR (or updates the one that
+      # already exists).
+      - name: Open a pull request
+        id: pr
+        if: steps.bump.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: update/${{ matrix.name }}-${{ steps.bump.outputs.version }}
+          base: main
+          title: "nix-update: ${{ matrix.name }} ${{ steps.bump.outputs.summary }}"
+          body: |
+            `${{ matrix.name }}`: ${{ steps.bump.outputs.summary }}
+
+            Build verified by `nix-update --build`. Auto-merge for this class: `${{ steps.bump.outputs.merge }}`.
+
+      - name: Merge when the policy allows it
+        if: steps.bump.outputs.merge == 'true' && steps.pr.outputs.pull-request-number != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge "${{ steps.pr.outputs.pull-request-number }}" --squash --delete-branch

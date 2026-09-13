@@ -25,6 +25,12 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
+  passthru.updatePolicy.autoMerge = [
+    "patch"
+    "minor"
+    "major"
+  ];
+
   meta = {
     description = "Tiny LAN web app that collects movie wishes and draws one at random every phase";
     longDescription = ''
