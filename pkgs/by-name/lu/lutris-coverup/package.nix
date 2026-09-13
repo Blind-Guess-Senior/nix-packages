@@ -6,7 +6,7 @@
 
 python313Packages.buildPythonApplication (finalAttrs: {
   pname = "lutris-coverup";
-  version = "0.1.1";
+  version = "0.1.2";
 
   pyproject = true;
 
@@ -14,7 +14,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
     owner = "callmenoodles";
     repo = "lutris-coverup";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0PRQiBoJQYEomfIRhp6K+ZTVWFddnYf03cmjEnhRaaE=";
+    hash = "sha256-LaMHeEOib5AE4U95rwuhYyXmLwbmAfY+EUk8V3eMoW0=";
   };
 
   postPatch = ''
