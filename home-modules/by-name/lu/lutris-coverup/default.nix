@@ -25,7 +25,7 @@ let
     '';
   };
 
-  repoPkgs = pkgs.extend (import ../../overlays).default;
+  repoPkgs = pkgs.extend (import ../../../../overlays).default;
 in
 {
   options.programs.lutris-coverup = {

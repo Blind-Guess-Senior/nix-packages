@@ -10,7 +10,7 @@ let
 
   # movie-pool lives in the toy packages, so the `full` overlay is needed here:
   # the `default` one only carries the serious packages.
-  repoPkgs = pkgs.extend (import ../../overlays).full;
+  repoPkgs = pkgs.extend (import ../../../../../overlays).full;
 in
 {
   options.services.movie-pool = {
