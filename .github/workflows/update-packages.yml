@@ -52,7 +52,7 @@ jobs:
       - name: Open a pull request
         id: pr
         if: steps.bump.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           branch: update/${{ matrix.name }}-${{ steps.bump.outputs.version }}
           base: main
