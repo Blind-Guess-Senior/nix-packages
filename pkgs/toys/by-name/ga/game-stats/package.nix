@@ -23,13 +23,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "game-stats";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "Rhynic-Studio";
     repo = "GameStats";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fQVS7Fj1QNjb3KblNpAHLx82iEuCRvKvpfP7orULJrU=";
+    hash = "sha256-bpDyDN1O8qWzZusSfV1yonBKYzjhTfgVxpdGx6FQI6g=";
   };
 
   npmInstallFlags = [
