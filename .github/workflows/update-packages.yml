@@ -32,6 +32,7 @@ jobs:
           - { name: lutris-coverup,     path: lutris-coverup }
           - { name: movie-pool,         path: movie-pool }
           - { name: python-steamgriddb, path: python3Packages.python-steamgriddb }
+          - { name: game-stats,         path: game-stats }
     steps:
       - uses: actions/checkout@v7
 
