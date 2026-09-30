@@ -64,6 +64,25 @@ in
       default = "game-stats";
       description = "Name of the systemd state directory holding the SQLite file.";
     };
+
+    enableGames = lib.mkOption {
+      type = lib.types.nullOr (lib.types.listOf lib.types.str);
+      default = null;
+      example = [
+        "crash"
+        "cs2"
+      ];
+      description = ''
+        Which games this instance serves, by their path segment.
+
+        Unset means all of them. Setting it to an empty list means none — the
+        two are deliberately different, so a host can turn everything off
+        without the module helpfully turning it back on.
+
+        Turns only affect what is served and listed: the database is left
+        alone, so re-enabling a game brings its matches straight back.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -80,6 +99,10 @@ in
       }
       // lib.optionalAttrs (cfg.basePath != "") {
         BASE_PATH = cfg.basePath;
+      }
+      // lib.optionalAttrs (cfg.enableGames != null) {
+        # 不设这个变量 = 全都服务；设成空串 = 一个都不服务。服务端分得清这两者
+        GAMES = lib.concatStringsSep "," cfg.enableGames;
       };
 
       serviceConfig = {
