@@ -8,16 +8,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "game-stats";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "Rhynic-Studio";
     repo = "GameStats";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Fk0/w6J0rf0hddarCXlUyg73aRO0Eu1Rf0dnX4REZCU=";
+    hash = "sha256-uDuU/c5L18XxwSuzKkBlH0jqfhrDvKe/zU94cJ2neIU=";
   };
 
-  npmDepsHash = "sha256-IJdkfSLyPWYGDLTqo0XqSUrddCeB1zwec1w6jSi4aUQ=";
+  npmDepsHash = "sha256-Aykerrhhs5Gwht0wqPL7v6Wo9eNMR46d1Eoulg0GGm0=";
 
   # Node 24, because the server uses the built in `node:sqlite` module.
   inherit nodejs;
