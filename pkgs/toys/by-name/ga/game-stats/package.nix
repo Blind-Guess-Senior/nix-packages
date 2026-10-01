@@ -8,13 +8,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "game-stats";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "Rhynic-Studio";
     repo = "GameStats";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-s0Awm5g1rxX0rgm11o8YrReGGNmeUnHpSfU3A61Fq4U=";
+    hash = "sha256-Fk0/w6J0rf0hddarCXlUyg73aRO0Eu1Rf0dnX4REZCU=";
   };
 
   npmDepsHash = "sha256-IJdkfSLyPWYGDLTqo0XqSUrddCeB1zwec1w6jSi4aUQ=";
